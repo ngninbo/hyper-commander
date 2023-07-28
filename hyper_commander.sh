@@ -1,19 +1,18 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2162
 
-options=(Exit "OS info" "User info" "File and Dir operations" "Find Executables")
-
-appName="Hyper Commander"
 permissionUpdatedText="Permissions have been updated."
-length=${#options[@]}
-min=0
 
 function outMenu() {
+  options=(Exit "OS info" "User info" "File and Dir operations" "Find Executables")
+
+  appName="Hyper Commander"
   pad='                           '
   border="------------------------------"
   echo "$border"
   printf "| %s%s|\n" "$appName" "${pad:${#appName}}"
-  
-  for (( i = min; i < length; i++ ));
+
+  for (( i = 0; i < ${#options[@]}; i++ ));
   do
    rawLineItem="$i: ${options[i]}"
    printf "| %s%s|\n" "$i: ${options[i]}" "${pad:${#rawLineItem}}"
@@ -35,9 +34,9 @@ function listFiles() {
        printf "D %s\n" "$file"
     fi
   done
- 
+
   printf "\n%s\n%s\n%s\n" "$border" "$rawLineItem" "$border"
-  
+
 }
 
 function listAndProcessInput() {
@@ -83,21 +82,21 @@ function updateReadAndWritePermission() {
 }
 
 function manageFile() {
-   
+
    border="---------------------------------------------------------------------"
    rawLineItem="| 0 Back | 1 Delete | 2 Rename | 3 Make writable | 4 Make read-only |"
-   
+
    while true
    printf "\n%s\n%s\n%s\n" "$border" "$rawLineItem" "$border"
    read input
    do
      case $input in
-        0) break;;
+      0) break;;
 	    1) rm "$1" && printf "%s has been deleted." "$1" && break;;
 	    2) renameFile "$1" && break;;
 	    3) updateAllReadAndWritePermission "$1" && break;;
-        4) updateReadAndWritePermission "$1" && break;;
-        *) echo "Invalid option!";;
+      4) updateReadAndWritePermission "$1" && break;;
+      *) echo "Invalid option!";;
      esac
    done
 }
@@ -105,9 +104,9 @@ function manageFile() {
 function searchExecutable() {
 
    echo "Enter an executable name: " && read input
-   
+
    location=$(which "$input")
-   
+
    if [[ "$location" == *"$input"* ]]; then
       printf "Located in: %s\n" "$location"
       execute "$input"
@@ -117,23 +116,25 @@ function searchExecutable() {
 }
 
 function execute() {
-  
   echo "Enter arguments: " && read input
-  $1 $input
+  $1 "$input"
 }
 
-printf "Hello %s!\n" "$USER"
-while true
+function main() {
+    printf "Hello %s!\n" "$USER"
+    while true
 
-outMenu && read input
-do
+    outMenu && read input
+    do
+       case $input in
+        0) echo -e "Farewell!" && break ;;
+    	  1) printf "%s\n" "$(uname -on)";;
+    	  2) printf "%s\n" "$(whoami)";;
+    	  3) listAndProcessInput;;
+        4) searchExecutable;;
+        *) echo "Invalid option!" ;;
+       esac
+    done
+}
 
-   case $input in
-    0) echo -e "Farewell!" && break ;;
-	1) uname -on;;
-	2) whoami;;
-	3) listAndProcessInput;;
-    4) searchExecutable;;
-    *) echo "Invalid option!" ;;
-   esac
-done
+main

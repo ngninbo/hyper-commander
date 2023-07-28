@@ -7,7 +7,7 @@ for (( i = 0; i < 5; i++));
 do
     case "${1}" in
 
-        ${answers[i]})
+        "${answers[i]}")
             ((total_score++))
             ;;
         "-"|"--")

@@ -12,4 +12,4 @@ solve() {
     fi
 }
 
-solve $1 $2 $3
+solve "$1" "$2" "$3"

@@ -10,9 +10,9 @@ function subtract() {
 
 case $1 in
     add )
-        add $2 $3;;
+        add "$2" "$3";;
     subtract )
-        subtract $2 $3;;
+        subtract "$2" "$3";;
     * )
         echo "unknown operation";;
 esac
