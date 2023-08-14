@@ -3,14 +3,14 @@
 
 permissionUpdatedText="Permissions have been updated."
 
-function outMenu() {
+function out_menu() {
   options=(Exit "OS info" "User info" "File and Dir operations" "Find Executables")
 
-  appName="Hyper Commander"
+  app_name="Hyper Commander"
   pad='                           '
   border="------------------------------"
   echo "$border"
-  printf "| %s%s|\n" "$appName" "${pad:${#appName}}"
+  printf "| %s%s|\n" "$app_name" "${pad:${#app_name}}"
 
   for (( i = 0; i < ${#options[@]}; i++ ));
   do
@@ -20,7 +20,7 @@ function outMenu() {
   echo $border
 }
 
-function listFiles() {
+function list_files() {
   title="The list of files and directories:"
   printf "\n%s\n" "$title"
   border="---------------------------------------------------"
@@ -39,10 +39,10 @@ function listFiles() {
 
 }
 
-function listAndProcessInput() {
+function list_and_process_input() {
   while true
 
-    listFiles && read input
+    list_files && read input
   do
 
     if [[ "$input" != 0 ]]; then
@@ -61,19 +61,19 @@ function listAndProcessInput() {
   done
 }
 
-function renameFile() {
+function rename_file() {
    echo "Enter the new file name: " && read input
    mv "$1" "$input"
    printf "%s has been renamed as %s\n" "$1" "$input"
 }
 
-function updateAllReadAndWritePermission() {
+function update_all_read_and_write_permission() {
    chmod a=rw "$1"
    printf "%s\n" "$permissionUpdatedText"
    stat "$1"
 }
 
-function updateReadAndWritePermission() {
+function update_read_and_write_permission() {
    chmod u=rw "$1"
    chmod g=rw "$1"
    chmod o=r "$1"
@@ -81,7 +81,7 @@ function updateReadAndWritePermission() {
    stat "$1"
 }
 
-function manageFile() {
+function manage_file() {
 
    border="---------------------------------------------------------------------"
    rawLineItem="| 0 Back | 1 Delete | 2 Rename | 3 Make writable | 4 Make read-only |"
@@ -93,15 +93,15 @@ function manageFile() {
      case $input in
       0) break;;
 	    1) rm "$1" && printf "%s has been deleted." "$1" && break;;
-	    2) renameFile "$1" && break;;
-	    3) updateAllReadAndWritePermission "$1" && break;;
-      4) updateReadAndWritePermission "$1" && break;;
+	    2) rename_file "$1" && break;;
+	    3) update_all_read_and_write_permission "$1" && break;;
+      4) update_read_and_write_permission "$1" && break;;
       *) echo "Invalid option!";;
      esac
    done
 }
 
-function searchExecutable() {
+function search_executable() {
 
    echo "Enter an executable name: " && read input
 
@@ -124,14 +124,14 @@ function main() {
     printf "Hello %s!\n" "$USER"
     while true
 
-    outMenu && read input
+    out_menu && read input
     do
        case $input in
         0) echo -e "Farewell!" && break ;;
     	  1) printf "%s\n" "$(uname -on)";;
     	  2) printf "%s\n" "$(whoami)";;
-    	  3) listAndProcessInput;;
-        4) searchExecutable;;
+    	  3) list_and_process_input;;
+        4) search_executable;;
         *) echo "Invalid option!" ;;
        esac
     done
