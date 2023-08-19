@@ -2,14 +2,7 @@
 sumAngleInTriangle=180
 
 solve() {
-
-    sumAngle=$(( $1 + $2 + $3 ))
-
-    if [[ $sumAngle -eq $sumAngleInTriangle ]]; then
-        echo "Yes"
-    else
-        echo "No"
-    fi
+    [[ $(( $1 + $2 + $3 )) -eq $sumAngleInTriangle ]] && echo "Yes" || echo "No"
 }
 
 solve "$1" "$2" "$3"
